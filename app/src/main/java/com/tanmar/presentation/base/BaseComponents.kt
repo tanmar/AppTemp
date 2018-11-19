@@ -3,6 +3,7 @@ package com.tanmar.presentation.base
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.CallSuper
+import com.tanmar.R
 import dagger.android.support.DaggerFragment
 
 abstract class BasePresenter<V : BaseView> {

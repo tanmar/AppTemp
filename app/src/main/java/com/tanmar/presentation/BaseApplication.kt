@@ -1,5 +1,6 @@
 package com.tanmar.presentation
 
+import com.tanmar.presentation.di.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 

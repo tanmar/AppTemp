@@ -2,6 +2,7 @@ package com.tanmar.presentation
 
 import android.widget.Toolbar
 import androidx.annotation.Nullable
+import com.tanmar.R
 import dagger.android.support.DaggerAppCompatActivity
 
 abstract class BaseActivity : DaggerAppCompatActivity() {

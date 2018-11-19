@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+         xmlns:tools="http://schemas.android.com/tools"
+         android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="?attr/actionBarSize"
+         android:elevation="@dimen/material_elevation_app_bar"
+         app:theme="?attr/actionBarStyle"
+         tools:ignore="Overdraw"/>
