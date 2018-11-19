@@ -4,7 +4,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import com.tanmar.R
+import com.tanmar.presentation.utils.LogUtils.LOGE
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 abstract class BasePresenter<V : BaseView> {
 
@@ -32,6 +34,25 @@ interface ErrorHandler<T : BaseView> {
     fun attachView(view: T)
 
     fun detachView()
+}
+
+class BaseErrorHandler<T : BaseView> @Inject constructor() : ErrorHandler<T> {
+
+    var view: T? = null
+
+    override fun handle(throwable: Throwable) {
+        LOGE(throwable)
+        view?.showError(throwable.message ?: "error")
+
+    }
+
+    override fun attachView(view: T) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        view = null
+    }
 }
 
 interface BaseView {

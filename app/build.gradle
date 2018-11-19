@@ -26,13 +26,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //Architecture
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     kapt "com.google.dagger:dagger-compiler:${dagger_version}"
     kapt "com.google.dagger:dagger-android-processor:${dagger_version}"
     implementation "com.google.dagger:dagger-android-support:${dagger_version}"
@@ -73,7 +77,6 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true
     }
-
 
     //Testing
     testImplementation "org.mockito:mockito-core:${mockito_version}"
