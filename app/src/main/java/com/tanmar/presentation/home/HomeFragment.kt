@@ -3,14 +3,19 @@ package com.tanmar.presentation.home
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.tanmar.R
 import com.tanmar.data.github.RepoEntity
 import com.tanmar.presentation.base.BaseFragment
+import com.tanmar.presentation.repositorydetails.RepositoryDetailsFragment
+import com.tanmar.presentation.repositorydetails.RepositoryDetailsFragmentArgs
+import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 
@@ -28,11 +33,16 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class HomeFragment : BaseFragment(), HomeContract.View {
+class HomeFragment : BaseFragment(), HomeContract.View, HomeAdapter.Listener {
 
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
+
+
+    private val adapter by lazy {
+        HomeAdapter(this)
+    }
 
     @Inject
     lateinit var homePresenter: HomePresenter
@@ -55,25 +65,51 @@ class HomeFragment : BaseFragment(), HomeContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homePresenter.onAttachView(this)
+        recycleViewHome.layoutManager = LinearLayoutManager(this.context)
+        recycleViewHome.adapter = adapter
 
+        searchViewHome.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    homePresenter.searchUserRepository(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
     }
 
     override fun showUserRepositories(repositories: List<RepoEntity>) {
-        Log.d("ttt", "-->>${repositories.size}")
+        adapter.updateItems(repositories)
     }
+
+    override fun onSelectedRepository(repository: RepoEntity) {
+        navigateToRepositoryDetails(repository)
+    }
+
+    private fun navigateToRepositoryDetails(repository: RepoEntity) {
+        val action = HomeFragmentDirections.actionHomeFragmentToRepositoryDetailsFragment(repository)
+        action.setSelectedRepository(repository)
+        view?.findNavController()?.navigate(action)
+    }
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException(
+                context.toString() + " must implement OnFragmentInteractionListener"
+            )
         }
     }
 
